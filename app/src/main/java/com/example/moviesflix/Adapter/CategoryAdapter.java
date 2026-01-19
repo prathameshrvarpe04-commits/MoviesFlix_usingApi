@@ -20,9 +20,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     Context context ;
     List<moviesCategory> moviesCategories ;
 
-    public CategoryAdapter(Context context, List<moviesCategory> moviesCategories) {
+    private final MovieAdapter.OnMovieClickListener movieClickListener ;
+
+
+    public CategoryAdapter(Context context, List<moviesCategory> moviesCategories, MovieAdapter.OnMovieClickListener movieClickListener) {
         this.context = context;
         this.moviesCategories = moviesCategories;
+        this.movieClickListener = movieClickListener;
     }
 
     @NonNull
@@ -41,7 +45,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         // now inner recycle view
 
-        MovieAdapter movieAdapter = new MovieAdapter(context , category.getMovies());
+        MovieAdapter movieAdapter = new MovieAdapter(context , category.getMovies() , movieClickListener);
         holder.childRecycleView.setAdapter(movieAdapter);
         holder.childRecycleView.setLayoutManager(new LinearLayoutManager(context , RecyclerView.HORIZONTAL , false));
     }

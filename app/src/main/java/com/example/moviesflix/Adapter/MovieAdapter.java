@@ -1,6 +1,7 @@
 package com.example.moviesflix.Adapter;
 
 import android.content.Context;
+import com.bumptech.glide.Glide;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     List<Movie> movies ;
 
-    public MovieAdapter(Context context, List<Movie> movies) {
+    private final OnMovieClickListener movieClickListener ;
+
+    public MovieAdapter(Context context, List<Movie> movies, OnMovieClickListener movieClickListener) {
         this.context = context;
         this.movies = movies;
+        this.movieClickListener = movieClickListener;
+    }
+
+    public interface OnMovieClickListener{
+        void onMovieClick(Movie movie);
     }
 
     @NonNull
@@ -36,7 +44,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(@NonNull MovieAdapter.MovieViewHolder holder, int position) {
 
         Movie movie = movies.get(position);
-        holder.imageView.setImageResource(movie.getImageResourceId());
+//        holder.imageView.setImageResource(movie.getImageResourceId());
+        Glide.with(context)
+                .load(movie.getPosterPath())
+                .into(holder.imageView);
 
     }
 
@@ -51,6 +62,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             super(itemView);
 
             imageView = itemView.findViewById(R.id.movie_image_view);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && movieClickListener !=null){
+                        movieClickListener.onMovieClick(movies.get(position));
+
+                    }
+                }
+            });
 
         }
     }
